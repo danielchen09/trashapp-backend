@@ -9,6 +9,10 @@ const downloadImage = require('./downloadImage')
 const port = process.env.PORT || 8080;
 const app = express();
 
+const mongoose = require('mongoose');
+const url = 'mongodb+srv://guest:guest@cluster0-5sqr5.mongodb.net/img?retryWrites=true&w=majority';
+mongoose.connect(url);
+
 app.use(cors())
 app.use(bodyParser.urlencoded({ extended: true }));
 

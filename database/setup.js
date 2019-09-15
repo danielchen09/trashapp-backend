@@ -24,3 +24,25 @@ function createGroup(){
     users: []
   });
 }
+
+function createTrashCan(){
+  TrashCanModel.create({
+    latitude: 0,
+    longitude: 0,
+    items: [],
+    currentId: "ABCDE",
+  });
+}
+
+function createItem(){
+  ItemModel.create({
+    category: "Test",
+    probability: 1,
+    fieldId: null,
+    code: null
+  })
+}
+
+TrashCanModel.updateOne({currentId: "ABCDE"}, {currentId: "ABBBB"}, (err, trashCan) => {
+  console.log(trashCan);
+})

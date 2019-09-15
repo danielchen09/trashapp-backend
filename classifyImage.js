@@ -26,14 +26,14 @@ module.exports = (req,res, model) => {
                     let row = [];
                     for(let j = 0; j < image.bitmap.width; j++){
                         let values = Jimp.intToRGBA(image.getPixelColor(i,j))
-                        let pixel = [values.r,values.g,values.b];
+                        let norm = 255;
+                        let pixel = [values.r / norm ,values.g / norm ,values.b / norm ];
                         row.push(pixel);
                     }
                     array.push(row)
                 }
                 tensor = tf.tensor3d(array).expandDims()
-                outputTensor = model.predict(tensor)
-                outputTensor.data()
+                outputTensor = model.predict(tensor).data()
                     .then(probs => {
                         let maxIndex = 0;
                         let maxProb = 0;

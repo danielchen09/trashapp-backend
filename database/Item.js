@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const ItemSchema = mongoose.Schema({
-  category: Sting,
+  category: String,
   fileId: mongoose.Schema.Types.ObjectId
 });
 

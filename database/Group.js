@@ -8,4 +8,4 @@ const GroupSchema = mongoose.Schema({
   }]
 });
 
-modules.exports = mongoose.model('Group', GroupSchema);
+module.exports = mongoose.model('Group', GroupSchema);

@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 
+const uploadImageBatch = require('./uploadImageBatch');
 const uploadImage = require('./uploadImage');
 const downloadImage = require('./downloadImage')
 
@@ -19,8 +20,17 @@ app.post('/testPost', (req, res) => {
   console.log(req.body);
 });
 
+app.post('/uploadbatch', (req, res) => {
+  uploadImageBatch(req, res);
+})
+
 app.post('/upload', (req, res) => {
-  uploadImage(req, res)
+  uploadImage(req, res);
+})
+
+app.post('/getLog', (req, res) => {
+  console.log(req);
+  res.send(req.body);
 })
 
 app.post('/download', (req, res) => {

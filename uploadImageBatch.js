@@ -1,5 +1,4 @@
 const multer = require('multer');
-const {addItemToUser} = require('./database/functions');
 const storage = require('multer-gridfs-storage')({
    url: 'mongodb+srv://guest:guest@cluster0-5sqr5.mongodb.net/img?retryWrites=true&w=majority',
    file: (req, file) => {
@@ -14,17 +13,21 @@ const storage = require('multer-gridfs-storage')({
 let upload = null;
 storage.on('connection', (db) => {
   console.log('connected');
-  upload = multer({storage: storage}).single('file');
+  upload = multer({storage: storage}).array('file', 30);
 });
 
 module.exports = (req, res) => {
   upload(req, res, (err) => {
-    addItemToUser(req._id, req.file.id, req.category, req.probability).then((items) => {
-      if(err){
-        console.log(err);
-        res.status(500).json(err);
-      }
-      res.status(200).json(items);
-    })
-  })
+    console.log(req.body);
+    console.log(req.files);
+
+    if (err instanceof multer.MulterError) {
+      console.log(err);
+      return res.status(500).json(err)
+    } else if (err) {
+      console.log(err);
+      return res.status(500).json(err)
+    }
+    return res.status(200).send(req.file)
+  });
 }

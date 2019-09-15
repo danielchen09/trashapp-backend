@@ -19,6 +19,7 @@ storage.on('connection', (db) => {
 
 module.exports = (req, res) => {
   upload(req, res, (err) => {
+    console.log(req.body);
     addItemsToTrashCan(req.body.code, req.files, JSON.parse(req.body.stats)).then((newCode) => {
       if (err) {
         console.log(err);

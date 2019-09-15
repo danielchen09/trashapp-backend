@@ -7,9 +7,12 @@ const uploadImage = require('./uploadImage');
 const downloadImage = require('./downloadImage');
 const classifyImage = require('./classifyImage');
 
+const register = require('./register');
+const login = require('./login');
+
 const tf = require('@tensorflow/tfjs')
 // Load the binding (CPU computation)
-require('@tensorflow/tfjs-node')
+// require('@tensorflow/tfjs-node')
 
 // Load the Tensorflow model
 async function load_model(){
@@ -70,5 +73,13 @@ app.post('/download', (req, res) => {
 app.post('/classify',(req,res) => {
   classifyImage(req,res, model);
 });
+
+app.post('/signup', (req, res) => {
+  register(req, res);
+})
+
+app.post('/signin', (req, res) => {
+  login(req, res);
+})
 
 app.listen(port, () => console.log('server listening on port ' + port));

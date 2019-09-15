@@ -2,7 +2,7 @@ const Jimp = require('jimp')
 const multer = require('multer');
 const tf = require('@tensorflow/tfjs')
 // Load the binding (CPU computation)
-require('@tensorflow/tfjs-node')
+// require('@tensorflow/tfjs-node')
 
 
 const storage = multer.memoryStorage();

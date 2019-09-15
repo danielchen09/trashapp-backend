@@ -7,26 +7,20 @@ const GroupModel = require('./Group');
 const ItemModel = require('./Item');
 const TrashCanModel = require('./TrashCan');
 
-UserModel.create({
-  username: "test",
-  password: "test",
-  name: "test",
-  points: 0,
-  groups: [],
-  items: []
-});
+function createUser(){
+  UserModel.create({
+    username: "test",
+    password: "test",
+    name: "test",
+    points: 0,
+    groups: [],
+    items: []
+  });
+}
 
-// const UserSchema = mongoose.Schema({
-//   username: String,
-//   password: String,
-//   name: String,
-//   points: Number,
-//   groups: [{
-//     type: mongoose.Schema.Types.ObjectId,
-//     ref: 'Group'
-//   }],
-//   items: [{
-//     type: mongoose.Schema.Types.ObjectId,
-//     ref: 'Item'
-//   }]
-// });
+function createGroup(){
+  GroupModel.create({
+    name: "test",
+    users: []
+  });
+}

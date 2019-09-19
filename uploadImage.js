@@ -19,7 +19,7 @@ storage.on('connection', (db) => {
 
 module.exports = (req, res) => {
   upload(req, res, (err) => {
-    addItemToUser(req._id, req.file.id, req.category, req.probability).then((items) => {
+    addItemToUser(req.body._id, req.file.id, JSON.parse(req.body.stats)).then((items) => {
       if(err){
         console.log(err);
         res.status(500).json(err);

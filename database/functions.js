@@ -1,18 +1,21 @@
 const mongoose = require('mongoose');
 
-function addItemToUser(userId, fileId, category, probability){
+function addItemToUser(userId, fileId, stats){
   return new Promise((resolve, reject) => {
+    const category = stats.category;
+    const probability = stats.probability;
     const UserModel = require('./User');
     const ItemModel = require('./Item');
+    console.log(userId);
 
     ItemModel.create({
       category: category,
       probability: probability,
-      fileId: mongoose.Schema.Types.ObjectId(fileId),
+      fileId: mongoose.Types.ObjectId(fileId),
       code: null,
     }, (err, item) => {
-      UserModel.update({
-        _id: mongoose.Schema.Types.ObjectId(userId)
+      UserModel.findOneAndUpdate({
+        _id: mongoose.Types.ObjectId(userId)
       }, {
         $push: {items: item}
       }, (err, user) => {
@@ -27,27 +30,38 @@ function addItemsToTrashCan(code, files, stats){
     const TrashCanModel = require('./TrashCan');
     const ItemModel = require('./Item');
 
-    TrashCanModel.update({
+    let newCode = makeid(5);
+    TrashCanModel.updateOne({
       currentId: code
     }, {
-      currentId: makeid(5)
+      currentId: newCode
     }, (err, trashCan) => {
-      _addItemsToTrashCan(files, stats, code, TrashCanModel, ItemModel);
+      _addItemsToTrashCan(files, stats, code, newCode, resolve, TrashCanModel, ItemModel);
     })
-
   })
 }
 
-function _addItemsToTrashCan(files, stats, code, TrashCanModel, ItemModel, index=0){
+function _addItemsToTrashCan(files, stats, code, newCode, resolve, TrashCanModel, ItemModel, index=0){
   ItemModel.create({
     category: stats[index].category,
     probability: stats[index].probability,
-    fileId: files[index],
+    fileId: files[index].id,
     code: code,
   }, (err, item) => {
-    if(index+1 < files.length){
-      _addItemsToTrashCan(files, stats, code, TrashCanModel, ItemModel, index+1);
-    }
+    TrashCanModel.updateOne({
+      currentId: newCode
+    }, {
+      $push: {items: item}
+    }, (err, trashCan) => {
+      if(err)
+      console.log(err);
+      console.log(newCode);
+      if(index+1 < files.length){
+        _addItemsToTrashCan(files, stats, code, newCode, resolve, TrashCanModel, ItemModel, index+1);
+      }else{
+        resolve(newCode);
+      }
+    })
   })
 }
 
@@ -63,4 +77,5 @@ function makeid(length) {
 
 module.exports = {
   addItemToUser,
+  addItemsToTrashCan,
 }
